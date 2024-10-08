@@ -1,28 +1,24 @@
-const ADD_TO_DO = 'ADD_TO_DO';
+const defaultState = {
+  user: 'CamperBot',
+  status: 'offline',
+  friends: '732,982',
+  community: 'freeCodeCamp'
+};
 
-// A list of strings representing tasks to do:
-const todos = [
-  'Go to the store',
-  'Clean the house',
-  'Cook dinner',
-  'Learn to code',
-];
-
-const immutableReducer = (state = todos, action) => {
+const immutableReducer = (state = defaultState, action) => {
   switch(action.type) {
-    case ADD_TO_DO:
+    case 'ONLINE':
       // Don't mutate state here or the tests will fail
-      return [...state, action.todo]
+      return Object.assign({}, state, {status: 'online'})
     default:
       return state;
   }
 };
 
-const addToDo = (todo) => {
+const wakeUp = () => {
   return {
-    type: ADD_TO_DO,
-    todo
+    type: 'ONLINE'
   }
-}
+};
 
 const store = Redux.createStore(immutableReducer);
