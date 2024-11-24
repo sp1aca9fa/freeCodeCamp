@@ -1,28 +1,24 @@
 <script>
   document.addEventListener('DOMContentLoaded', function(){
-    document.getElementById('getMessage').onclick = function(){
-      const req = new XMLHttpRequest();
-      req.open("GET",'/json/cats.json', true);
-      req.send();
-      req.onload=function(){
-        let json = JSON.parse(req.responseText);
-        let html = "";
-        // Add your code below this line
-        json = json.filter(function(val) {
-  return (val.id !== 1);
-});
+    document.getElementById('sendMessage').onclick = function(){
 
-        // Add your code above this line
-         json.forEach(function(val) {
-           html += "<div class = 'cat'>"
+      const userName = document.getElementById('name').value;
+      const url = 'https://jsonplaceholder.typicode.com/posts';
+      // Add your code below this line
+      const xhr = new XMLHttpRequest();
+xhr.open('POST', url, true);
+xhr.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
+xhr.onreadystatechange = function () {
+  if (xhr.readyState === 4 && xhr.status === 201){
+    const serverResponse = JSON.parse(xhr.response);
+    document.getElementsByClassName('message')[0].textContent = serverResponse.userName + serverResponse.suffix;
+  }
+};
+const body = JSON.stringify({ userName: userName, suffix: ' loves cats!' });
+xhr.send(body);
 
-           html += "<img src = '" + val.imageLink + "' " + "alt='" + val.altText + "'>"
-
-           html += "</div>"
-         });
-         document.getElementsByClassName('message')[0].innerHTML = html;
-       };
-     };
+      // Add your code above this line
+    };
   });
 </script>
 
@@ -53,12 +49,15 @@
   }
 </style>
 
-<h1>Cat Photo Finder</h1>
+<h1>Cat Friends</h1>
 <p class="message box">
-  The message will go here
+  Reply from Server will be here
 </p>
 <p>
-  <button id="getMessage">
-    Get Message
+  <label for="name">Your name:
+    <input type="text" id="name"/>
+  </label>
+  <button id="sendMessage">
+    Send Message
   </button>
 </p>
